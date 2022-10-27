@@ -1,68 +1,38 @@
 <?php
+include_once __DIR__."/../src/functions.php";
+include_once __DIR__."/../src/db.php";
+$url = $_SERVER['REQUEST_URI'];
 
+$url = explode('?', $url);
+$url = $url[0];
 
-//ДЗ:
-//1. изменить регистр строки на противоположный (изначальная строка должна быть в верхнем или нижнем регистре)
-//2. посчитать количество слов в строке
-//3. Получите первое слово каждого предложения в тексте.
-//4.  Переведите строку в транслит
-//5* Вывести таблицу умножения
-
-
-
-//start 1. изменить регистр строки на противоположный (изначальная строка должна быть в верхнем или нижнем регистре)
-
-$a = "LOREM";
-$a = strtolower($a);
-echo $a. "<br>";
-
-// end
-
-
-// start 2. посчитать количество слов в строке
-
-$str = "LOREM LOREM LOREM uuuuuuu";
-
-echo str_word_count($str). "<br>";
-
-// end
-
-// start 3. Получите первое слово каждого предложения в тексте.
-
-$first = "uuuuuuu. LOREM! ddddddddddddd? ldkhhhh.";
-
-$b = str_replace(["!", "?"], ".", $first);
-
-$tokens = explode(" . ", $b);
-
-echo $tokens[0] . "<br>";
-
-// в этой задаче полностью не смог разобраться, т.е. так выводит но нужно как-тл убрать точку, но есои в предложении несколько слов то не получается
-
-// end
-
-//start 4. Переведите строку в транслит
-
-function translit($str) {
-    $rus = ['А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ё', 'Ж', 'З', 'И', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'Я', 'а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я'];
-    $lat = ['A', 'B', 'V', 'G', 'D', 'E', 'E', 'Gh', 'Z', 'I', 'Y', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'U', 'F', 'H', 'C', 'Ch', 'Sh', 'Sch', 'Y', 'Y', 'Y', 'E', 'Yu', 'Ya', 'a', 'b', 'v', 'g', 'd', 'e', 'e', 'gh', 'z', 'i', 'y', 'k', 'l', 'm', 'n', 'o', 'p', 'r', 's', 't', 'u', 'f', 'h', 'c', 'ch', 'sh', 'sch', 'y', 'y', 'y', 'e', 'yu', 'ya'];
-    return str_replace($rus, $lat, $str);
+if ($url == '/'){
+    include_once __DIR__."/../src/pages/blog.php";
 }
-echo translit("Привет мир!"). "<br>";
 
-// end
-
-//start 5. Вывести таблицу умножения
-
-//Есть у вас цифры от 1 до 10
-
-    echo "<table><tr>";
-for ($i=1;$i<=10;$i++) {
-    echo "<td>";
-    for ($z=1;$z<=10;$z++) {
-        echo $i.'*'.$z.'='.($i*$z). "<br>"; }
-echo "</td>";
+if ($url == '/add_post_form'){
+    include_once __DIR__."/../src/pages/add_post.php";
 }
- echo "</table></tr>";
 
-// end
+if ($url == '/form'){
+    include_once __DIR__."/../homework/form.php";
+}
+
+if ($url == '/edit_post'){
+    include_once __DIR__."/../src/pages/edit_post.php";
+}
+
+if ($url == '/delete_page'){
+$id = $_GET['post'];
+$sql = "DELETE FROM posts WHERE id = '$id'";
+    mysqli_query($connection, $sql);
+}
+
+if (strpos($url, '/page/') === 0) {
+    $tmp = explode('/', $url);
+    $pageId = array_pop($tmp);
+//    debug($pageId);
+    include_once __DIR__."/../src/pages/page.php";
+}
+
+
